@@ -1,104 +1,92 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Calculadora de IMC</title>
     <style>
         body {
-            background-image: url('seu-fundo.jpg'); /* Substitua 'seu-fundo.jpg' pelo URL da imagem de fundo desejada */
-            background-size: cover;
-            background-position: center;
             font-family: Arial, sans-serif;
         }
-
         .container {
-            background-color: rgba(255, 255, 255, 0.8); /* Fundo semi-transparente */
-            border-radius: 8px;
-            padding: 20px;
-            margin: 20px auto;
-            max-width: 400px;
-        }
-
-        h1 {
-            text-align: center;
-            color: #333;
-        }
-
-        label {
-            font-weight: bold;
-        }
-
-        input[type="text"] {
-            width: 100%;
-            padding: 10px;
-            margin: 10px 0;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-        }
-
-        input[type="text"]:disabled {
-            background-color: #eee;
-        }
-
-        button {
-            display: block;
+            width: 300px;
             margin: 0 auto;
-            padding: 10px 20px;
-            background-color: #007bff;
-            color: #fff;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
+            text-align: center;
+            padding: 20px;
         }
-
-        button:hover {
-            background-color: #0056b3;
+        .input-group {
+            margin-bottom: 20px;
+        }
+        .input-group label {
+            display: block;
+        }
+        .input-group input {
+            width: 100%;
+            padding: 8px;
+            margin-top: 5px;
+        }
+        .result {
+            font-weight: bold;
+            margin-top: 10px;
         }
     </style>
 </head>
 <body>
     <div class="container">
         <h1>Calculadora de IMC</h1>
-        <form id="imc-form">
-            <label for="peso">Peso (kg)</label>
-            <input type="text" id="peso" name="peso" required>
-            
-            <label for="altura">Altura (m)</label>
-            <input type="text" id="altura" name="altura" required>
-            
-            <label for="imc">IMC</label>
-            <input type="text" id="imc" name="imc" disabled>
-            
-            <button type="button" id="calcular">Calcular</button>
-            <button type="button" id="limpar">Limpar Formulário</button>
-        </form>
+        <div class="input-group">
+            <label for="peso">Peso (kg):</label>
+            <input type="number" id="peso" placeholder="Digite seu peso" required>
+        </div>
+        <div class="input-group">
+            <label for="altura">Altura (m):</label>
+            <input type="number" id="altura" placeholder="Digite sua altura" required>
+        </div>
+        <button onclick="calcularIMC()">Calcular</button>
+        <button onclick="limparFormulario()">Limpar Formulário</button>
+        <div class="result">
+            <p>IMC: <span id="resultadoIMC">-</span></p>
+            <p>Classificação: <span id="classificacaoIMC">-</span></p>
+        </div>
     </div>
 
     <script>
-        const calcularButton = document.getElementById('calcular');
-        const limparButton = document.getElementById('limpar');
-        const pesoInput = document.getElementById('peso');
-        const alturaInput = document.getElementById('altura');
-        const imcInput = document.getElementById('imc');
-
-        calcularButton.addEventListener('click', () => {
-            const peso = parseFloat(pesoInput.value);
-            const altura = parseFloat(alturaInput.value);
+        function calcularIMC() {
+            const peso = parseFloat(document.getElementById("peso").value);
+            const altura = parseFloat(document.getElementById("altura").value);
+            const resultadoIMC = document.getElementById("resultadoIMC");
+            const classificacaoIMC = document.getElementById("classificacaoIMC");
 
             if (!isNaN(peso) && !isNaN(altura) && altura > 0) {
-                const imc = (peso / (altura * altura)).toFixed(2);
-                imcInput.value = imc;
-            } else {
-                alert('Por favor, insira valores válidos para peso e altura.');
-            }
-        });
+                const imc = peso / (altura * altura);
+                resultadoIMC.textContent = imc.toFixed(2);
 
-        limparButton.addEventListener('click', () => {
-            pesoInput.value = '';
-            alturaInput.value = '';
-            imcInput.value = '';
-        });
+                if (imc < 18.5) {
+                    classificacaoIMC.textContent = "Abaixo do peso";
+                } else if (imc < 24.9) {
+                    classificacaoIMC.textContent = "Peso normal";
+                } else if (imc < 29.9) {
+                    classificacaoIMC.textContent = "Sobrepeso";
+                } else if (imc < 34.9) {
+                    classificacaoIMC.textContent = "Obesidade Grau I";
+                } else if (imc < 39.9) {
+                    classificacaoIMC.textContent = "Obesidade Grau II";
+                } else {
+                    classificacaoIMC.textContent = "Obesidade Grau III";
+                }
+            } else {
+                alert("Por favor, insira valores válidos para peso e altura.");
+                resultadoIMC.textContent = "-";
+                classificacaoIMC.textContent = "-";
+            }
+        }
+
+        function limparFormulario() {
+            document.getElementById("peso").value = "";
+            document.getElementById("altura").value = "";
+            document.getElementById("resultadoIMC").textContent = "-";
+            document.getElementById("classificacaoIMC").textContent = "-";
+        }
     </script>
 </body>
 </html>
